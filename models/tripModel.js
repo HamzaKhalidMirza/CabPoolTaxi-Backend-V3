@@ -5,7 +5,7 @@ const tripSchema = new mongoose.Schema(
     seatsAvailable: {
       type: Number,
       required: [true, "Please provide number of available seats."],
-      min: [1, "Available Seats must be at least 1."],
+      min: [0, "Available Seats must be at least 1."],
     },
     totalSeats: {
       type: Number,

@@ -124,16 +124,16 @@ exports.signup = (Model) =>
     try {
       const url = `${req.protocol}://${req.get("host")}/me`;
       await new Email(newUser, url).sendWelcome();
-
-      createSendToken(newUser, 201, req, res);
     } catch (err) {
       console.log("err", err);
 
-      return next(
-        new AppError("There was an error sending the email. Try again later!"),
-        500
-      );
+      // return next(
+      //   new AppError("There was an error sending the email. Try again later!"),
+      //   500
+      // );
     }
+    
+    createSendToken(newUser, 201, req, res);
   });
 
 exports.userLogin = (Model) =>

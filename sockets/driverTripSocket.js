@@ -137,6 +137,7 @@ module.exports = function (io) {
       const driver = trip.driver;
 
       let doc, paymentDoc, bookingDoc, reviewDoc;
+      console.log(data);
 
       doc = await DriverTrack.findOne({trip: trip.id});
       if(doc) {
@@ -165,16 +166,19 @@ module.exports = function (io) {
             if(review.review && review.rating) {
               reviewDoc = await Review.create(review);
 
-              const clientReviewDoc = await Review.find({client: client.id});
+              const clientReviewDoc = await Review.find({client: client.id, givenBy: 'driver'});
               tripRatingsAverage = 0.0, tripRatingsQuantity = 0.0;
               if(clientReviewDoc) {
                 for(let i=0; i<clientReviewDoc.length; i++) {
                   tripRatingsQuantity++;
                   tripRatingsAverage = (tripRatingsAverage +
-                   parseInt(clientReviewDoc[i].rating)) / tripRatingsQuantity;
+                   parseInt(clientReviewDoc[i].rating));
+                }
+                if(tripRatingsQuantity > 0) {
+                  tripRatingsAverage = tripRatingsAverage / tripRatingsQuantity;
                 }
               }
-              console.log(tripRatingsAverage, tripRatingsQuantity);
+              console.log('Given By Driver:', tripRatingsAverage, tripRatingsQuantity);
               const clientDoc = await Client.findById(client.id);
               if(clientDoc) {
                 clientDoc.ratingsAverage = tripRatingsAverage;

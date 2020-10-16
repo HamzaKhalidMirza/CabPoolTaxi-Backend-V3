@@ -24,22 +24,26 @@ module.exports = function (io) {
       const trip = data.trip;
       const clientEvent = client.id + "-clientReviewSubmitted";
 
+      console.log(data);
+
       if (review) {
         if (review.review && review.rating) {
           reviewDoc = await Review.create(review);
 
-          const tripReviewDoc = await Review.find({ trip: trip.id });
+          const tripReviewDoc = await Review.find({ trip: trip.id, givenBy: 'client' });
           let tripRatingsAverage = 0.0,
             tripRatingsQuantity = 0.0;
           if (tripReviewDoc) {
             for (let i = 0; i < tripReviewDoc.length; i++) {
               tripRatingsQuantity++;
               tripRatingsAverage =
-                (tripRatingsAverage + parseInt(tripReviewDoc[i].rating)) /
-                tripRatingsQuantity;
+                (tripRatingsAverage + parseInt(tripReviewDoc[i].rating));
+            }
+            if(tripRatingsQuantity > 0) {
+              tripRatingsAverage = tripRatingsAverage / tripRatingsQuantity;
             }
           }
-          console.log(tripRatingsAverage, tripRatingsQuantity);
+          console.log('Given By Client(Trip):', tripRatingsAverage, tripRatingsQuantity);
           const tripDoc = await Trip.findById(trip.id);
           if (tripDoc) {
             tripDoc.ratingsAverage = tripRatingsAverage;
@@ -47,17 +51,19 @@ module.exports = function (io) {
             await tripDoc.save();
           }
 
-          const driverReviewDoc = await Review.find({ driver: driver.id });
+          const driverReviewDoc = await Review.find({ driver: driver.id, givenBy: 'client' });
           (tripRatingsAverage = 0.0), (tripRatingsQuantity = 0.0);
           if (driverReviewDoc) {
             for (let i = 0; i < driverReviewDoc.length; i++) {
               tripRatingsQuantity++;
               tripRatingsAverage =
-                (tripRatingsAverage + parseInt(driverReviewDoc[i].rating)) /
-                tripRatingsQuantity;
+                (tripRatingsAverage + parseInt(driverReviewDoc[i].rating));
+            }
+            if(tripRatingsQuantity > 0) {
+              tripRatingsAverage = tripRatingsAverage / tripRatingsQuantity;
             }
           }
-          console.log(tripRatingsAverage, tripRatingsQuantity);
+          console.log('Given By Client:', tripRatingsAverage, tripRatingsQuantity);
           const driverDoc = await Driver.findById(driver.id);
           if (driverDoc) {
             driverDoc.ratingsAverage = tripRatingsAverage;
