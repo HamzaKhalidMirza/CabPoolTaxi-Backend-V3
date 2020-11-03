@@ -45,7 +45,7 @@ const vehicleSchema = new mongoose.Schema(
             type: String,
             trim: true,
             maxlength: [40, 'Description must be less or equal then 40 characters.'],
-            minlength: [10, 'Description must be more or equal then 10 characters.']
+            minlength: [5, 'Description must be more or equal then 10 characters.']
         },
         type: {
             type: String,
