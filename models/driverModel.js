@@ -82,7 +82,7 @@ const driverSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Please provide an address"],
       maxlength: [40, "Address must be less or equal then 30 characters."],
-      minlength: [8, "Address must be more or equal then 8 characters."],
+      minlength: [2, "Address must be more or equal then 8 characters."],
     },
     postalCode: {
       type: String,
