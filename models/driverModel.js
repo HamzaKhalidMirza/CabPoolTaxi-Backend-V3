@@ -42,7 +42,7 @@ const driverSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: {
-        values: ["male", "female"],
+        values: ["male", "female", "others"],
         message: "Gender is either: male or female",
       },
     },
