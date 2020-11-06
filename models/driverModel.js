@@ -8,7 +8,7 @@ const driverSchema = new mongoose.Schema(
     username: {
       type: String,
       trim: true,
-      maxlength: [20, "Username must be less or equal then 30 characters."],
+      maxlength: [40, "Username must be less or equal then 30 characters."],
       minlength: [3, "Username must be more or equal then 8 characters."],
     },
     fName: {
